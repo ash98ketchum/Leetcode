@@ -3,17 +3,11 @@ class Solution {
         if (k > s.length()) {
             return false;
         }
-        HashMap<Character, Integer> charCount = new HashMap<>();
+        int mask = 0;
         for (char c : s.toCharArray()) {
-            charCount.put(c, charCount.getOrDefault(c, 0) + 1);
+            mask ^= 1 << (c - 'a');
         }
-        int oddCount = 0;
-        for (int count : charCount.values()) {
-            if (count % 2 != 0) {
-                oddCount++;
-            }
-        }
+        int oddCount = Integer.bitCount(mask);
         return k >= oddCount;
-    
     }
 }
