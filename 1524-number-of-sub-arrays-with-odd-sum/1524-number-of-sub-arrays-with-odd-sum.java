@@ -4,9 +4,11 @@ class Solution {
         long evencnt=1;
         long oddcnt=0;
         long p=0;
-        for(int it:arr){
-            p=(p+(it% 2 + 2) % 2) % 2;
-            if(p==0) evencnt++;
+        int[] pref=new int[arr.length];
+        pref[0]=arr[0];
+        for(int i=1;i<arr.length;i++) pref[i]=pref[i-1]+arr[i];
+        for(int it:pref){
+            if(it%2==0) evencnt++;
             else oddcnt++;
         }
         long res=(evencnt*oddcnt)%MOD;
