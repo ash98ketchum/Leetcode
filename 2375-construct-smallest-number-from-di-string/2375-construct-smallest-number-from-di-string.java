@@ -1,34 +1,26 @@
 class Solution {
-    private String result = "";
-
-    private boolean backtrack(String pattern, StringBuilder num, boolean[] used, int index) {
-        if (index == pattern.length() + 1) {
-            result = num.toString();
-            return true;
-        }
-
-        for (char digit = '1'; digit <= '9'; digit++) {
-            if (used[digit - '1']) continue;
-
-            if (index == 0 || 
-                (pattern.charAt(index - 1) == 'I' && num.charAt(index - 1) < digit) ||
-                (pattern.charAt(index - 1) == 'D' && num.charAt(index - 1) > digit)) {
-
-                num.append(digit);
-                used[digit - '1'] = true;
-
-                if (backtrack(pattern, num, used, index + 1)) return true;
-
-                num.deleteCharAt(num.length() - 1);
-                used[digit - '1'] = false;
+    
+    public String smallestNumber(String pattern) {
+        int ans[]=new int[pattern.length()+1];
+        int cnt=1;
+        Stack<Integer> st=new Stack<>();
+        for(int i=0;i<=pattern.length();i++){
+            if(i==pattern.length() || pattern.charAt(i)=='I'){
+                ans[i]=cnt;
+                cnt++;
+                while(!st.isEmpty()){
+                    ans[st.pop()]=cnt;
+                    cnt++;
+                }
+            }
+            else{
+                st.push(i);
             }
         }
-        return false;
-    }
-    public String smallestNumber(String pattern) {
-        boolean[] used = new boolean[9];
-        StringBuilder num = new StringBuilder();
-        backtrack(pattern, num, used, 0);
-        return result;
+        String res="";
+        for(int it:ans){
+            res+=it;
+        }
+        return res;
     }
 }
