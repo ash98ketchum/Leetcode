@@ -1,24 +1,36 @@
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
-        // state -> minimum sum of paths from bottom row to any index (i,j)
-        //transition -> dp[i][j] = triangle.get(i).get(j) + Math.min(dp[i+1][j], dp[i+1][j+1]);
-
-        //base case -> dp[n-1][j] = triangle.get(n-1)(j);
-        //final subproblem dp[0][0];
+       //state - > minimum path sum to a point (i,j) from 0,0 starting point by going either i, i+1,
+       //transition ->  dp[i][j] = a[i][j] + Min(dp[i-1][j-1], dp[i-1][j]);
+       // base condition -> dp[0][0] = a[0][0];
+       // final subproblem -> min(all the last rows) -> min(dp[n-1][j])
 
         int n = triangle.size();
         int dp[][] = new int[n][n];
 
-        //base case filling
-        for(int j = 0; j < n; j++){
-            dp[n-1][j] = triangle.get(n-1).get(j);
-        }
+        dp[0][0] = triangle.get(0).get(0);
 
-        for(int i = n-2; i >= 0; i--){
-            for(int j = i; j >= 0; j--){
-                dp[i][j] = triangle.get(i).get(j) + Math.min(dp[i+1][j], dp[i+1][j+1]);
+        for(int i = 1; i < n ; i++){
+            for(int j = 0; j <= i; j++){
+                if(j > 0 && j < i){
+                    dp[i][j] = triangle.get(i).get(j) + Math.min(dp[i-1][j], dp[i-1][j-1]);
+                } 
+                else if (j == 0) {
+                    dp[i][j] = triangle.get(i).get(j) + dp[i-1][j];
+                } 
+                else {
+                    dp[i][j] = triangle.get(i).get(j) + dp[i-1][j-1];
+                }
+                    
             }
         }
-        return dp[0][0];
+
+        int ans = Integer.MAX_VALUE;
+        for(int i = 0; i < n; i++){
+            ans = Math.min(ans, dp[n-1][i]);
+        }
+        return ans;
+
+
     }
 }
