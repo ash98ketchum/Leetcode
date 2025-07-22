@@ -52,11 +52,11 @@ class Solution {
                 }
             }
         }
-        Set<Integer> st = new HashSet<>();
-        for(int i = 0; i < n;i++){
-            st.add(dsu.find(i));
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            ans += dsu.rank.get(i);
         }
-        return n - st.size();
+        return ans;
         
     }
 }
