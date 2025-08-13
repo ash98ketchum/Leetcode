@@ -14,28 +14,28 @@
  * }
  */
 class Solution {
-    public int cnt = 0;
-    Set<TreeNode> st;
-    public int minCameraCover(TreeNode root) {
-        st = new HashSet<>();
-        st.add(null);
-        dfs(root, null);
-        return cnt;
-
-    }
-    public void dfs(TreeNode root, TreeNode parent){
-        if(root != null){
-            dfs(root.left, root);
-            dfs(root.right, root);
-
-            if((parent == null && !st.contains(root)) || !st.contains(root.left) || !st.contains(root.right)){
-                cnt++;
-                st.add(parent);
-                st.add(root);
-                st.add(root.left);
-                st.add(root.right);
-            }
-
+    int cnt = 0;
+    public int myrec(TreeNode root, int val){
+        if(root==null){
+            return 0;
         }
+
+        int l = myrec(root.left, 0);
+        int r = myrec(root.right, 0);
+        if(l == -1 || r == -1){
+            cnt++;
+            return 1;
+        }
+        else if(l == 1 || r == 1){
+            return 0;
+        }
+        else{
+            return -1;
+        }
+    }
+    public int minCameraCover(TreeNode root) {
+        if(root == null) return cnt;
+        if(myrec(root, 0) == -1) cnt++;
+        return cnt;
     }
 }
