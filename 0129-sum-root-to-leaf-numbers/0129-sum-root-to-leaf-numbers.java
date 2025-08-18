@@ -14,22 +14,32 @@
  * }
  */
 class Solution {
-    public int sumNumbers(TreeNode root) {
-        if(root == null){
-            return 0;
+    public void myrec(String s, TreeNode node, List<String> l){
+        if(node == null) return;
+
+        if(node.left != null){
+            myrec(s + node.val, node.left, l);
         }
-        return myrec(root,0);
+        if(node.right != null){
+            myrec(s + node.val, node.right, l);
+        }
+        if(node.left == null && node.right == null){
+            s += node.val;
+            l.add(s);
+        }
     }
-    public int myrec(TreeNode root, int sum){
-        if(root == null){
-            return 0;
-        }
-        if(root.left == null && root.right == null){
-            return sum *10 + root.val;
-        }
-        int left = myrec(root.left, sum*10+root.val);
-        int right = myrec(root.right, sum*10+root.val);
-        return left + right;
+    public int sumNumbers(TreeNode root) {
+        if(root == null) return 0;
+
+        String s = "";
+        List<String> l = new ArrayList<>();
+        myrec(s, root, l);
         
+        int sum = 0;
+        for(String st: l){
+            int digit = Integer.parseInt(st);
+            sum += digit;
+        }
+        return sum;
     }
 }
