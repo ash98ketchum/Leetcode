@@ -1,19 +1,29 @@
 class Solution {
 public:
     int maxFrequency(vector<int>& nums, int k, int numOperations) {
-        map<int, int> cnt;
-        for (int x : nums)
-            cnt[x]++;
+        const int MAX = 2000005;
+        vector<int> range(MAX, 0);
+        map<int,int> cnt;
 
-        sort(nums.begin(), nums.end());
-        int res = 1;
-        for (int x = 0; x <= nums.back() + k; ++x) {
-            int l = lower_bound(nums.begin(), nums.end(), x - k) - nums.begin();
-            int r =
-                upper_bound(nums.begin(), nums.end(), x + k) - nums.begin() - 1;
-            int diff = r - l + 1 - cnt[x];
-            res = max(res, min(diff, numOperations) + cnt[x]);
+        for (int x : nums) {
+            cnt[x]++;
+            int l = max(0, x - k);
+            int r = min(MAX - 1, x + k + 1);
+            range[l]++;
+            range[r]--;
         }
-        return res;
+
+        for (int i = 1; i < MAX; i++)
+            range[i] += range[i - 1];
+
+        int ans = 1;
+        for (int i = 0; i < MAX; i++) {
+            if (range[i] == 0) continue;
+            int already = cnt.count(i) ? cnt[i] : 0;
+            int total = range[i];
+            int freq = already + min(numOperations, total - already);
+            ans = max(ans, freq);
+        }
+        return ans;
     }
 };
