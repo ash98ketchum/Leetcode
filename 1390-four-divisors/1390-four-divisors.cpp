@@ -1,6 +1,6 @@
 class Solution {
 public:
-    pair<int, vector<int>> myfunc(int n){
+pair<int, vector<int>> myfunc(int n){
         vector<int> facts;
         for(int i = 1; i*i <= n; i++){
             if(n % i == 0){
@@ -12,7 +12,7 @@ public:
         }
         return make_pair(facts.size(), facts);
     }
-    int sumFourDivisors(vector<int> &nums) {
+    int sumFourDivisors(vector<int>& nums) {
         int ans = 0;
         int n = nums.size();
         for(int i = 0; i < n; i++){
