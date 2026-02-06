@@ -1,7 +1,7 @@
 class Solution {
 public:
     int maxFrequency(vector<int>& nums, int k) {
-        unordered_map<int,int> gain;
+        unordered_map<int,int> mp;
         int cnt = 0;
         int bruhh = 0;
         int ans = 0;
@@ -9,12 +9,11 @@ public:
         for(auto x : nums) {
             if(x == k){
                 cnt++;
-                bruhh++;
             }
             else{
-                int curr = gain[x] - bruhh;
+                int curr = mp[x] - cnt;
                 curr = max(1, curr + 1);
-                gain[x] = curr + bruhh;
+                mp[x] = curr + cnt;
                 ans = max(ans, curr);
             }
         }
