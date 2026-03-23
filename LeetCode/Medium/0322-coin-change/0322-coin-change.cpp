@@ -36,19 +36,15 @@ public:
         //     return val;
         // }
         int n = coins.size();
-        vector<vector<int>> dp(n, vector<int>(amount + 1, 1e9));
-        for(int i = 0; i < n; i++){
-            dp[i][0] = 0;
-        }
+        vector<int> dp(amount + 1, 1e9);
+        dp[0] = 0;
         // 1 2 3
         for(int sum = 1; sum <= amount; sum++){
             for(int start = 0; start < n; start++){
-                if((sum - coins[start]) >= 0) dp[start][sum] = min(dp[start][sum], 1 + dp[start][sum - coins[start]]);
-                if((start - 1) >= 0) dp[start][sum] = min(dp[start][sum],dp[start - 1][sum]);
-
+                if((sum - coins[start]) >= 0) dp[sum] = min(dp[sum], 1 + dp[sum - coins[start]]);
             }
         }
-        return (dp[n - 1][amount] >= 1e9) ? -1 : dp[n- 1][amount];
+        return dp[amount] == 1e9 ? -1 : dp[amount];
 
 
     }
