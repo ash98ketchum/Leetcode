@@ -1,40 +1,56 @@
 class Solution {
 public:
     // unordered_map<string, long long> memo;
-    vector<vector<int>> dp;
+    // vector<vector<int>> dp;
     // 1 2 5
     // 11 
     // 1 10
-    long long myrec(int start, long long sum, vector<int>& coins, int amount){
-        //base
-        if(sum == amount) return 0;
-        if(sum > amount) return 1e9;
-        if(start == coins.size()) return 1e9;
+    // long long myrec(int start, long long sum, vector<int>& coins, int amount){
+    //     //base
+    //     if(sum == amount) return 0;
+    //     if(sum > amount) return 1e9;
+    //     if(start == coins.size()) return 1e9;
 
-        //memoization
-        // string hash = to_string(start) + "#" + to_string(sum);
-        // if(memo.find(hash) != memo.end()) return memo[hash];
-        // cout << dp[start][sum] << endl;
-        if(dp[start][sum] != 2e9) return dp[start][sum];
+    //     //memoization
+    //     // string hash = to_string(start) + "#" + to_string(sum);
+    //     // if(memo.find(hash) != memo.end()) return memo[hash];
+    //     // cout << dp[start][sum] << endl;
+    //     if(dp[start][sum] != 2e9) return dp[start][sum];
 
-        //calls
-        long long take = 1 + myrec(start, sum + coins[start],coins, amount);
-        long long notake = myrec(start + 1, sum, coins, amount);
-        // cout << min(take, notake) << endl;
-        // memo[hash] = min(take, notake);
-        dp[start][sum] = min(take, notake);
-        return min(take, notake);
-    }
+    //     //calls
+    //     long long take = 1 + myrec(start, sum + coins[start],coins, amount);
+    //     long long notake = myrec(start + 1, sum, coins, amount);
+    //     // cout << min(take, notake) << endl;
+    //     // memo[hash] = min(take, notake);
+    //     dp[start][sum] = min(take, notake);
+    //     return min(take, notake);
+    // }
     int coinChange(vector<int>& coins, int amount) {
-        dp.resize(coins.size(), vector<int>(amount + 1, 2e9));
-        long long val = myrec(0, 0, coins, amount);
+        // dp.resize(coins.size(), vector<int>(amount + 1, 2e9));
+        // long long val = myrec(0, 0, coins, amount);
         
-        if(val >= 1e9){
-            return -1;
+        // if(val >= 1e9){
+        //     return -1;
+        // }
+        // else{
+        //     return val;
+        // }
+        int n = coins.size();
+        vector<vector<int>> dp(n, vector<int>(amount + 1, 1e9));
+        for(int i = 0; i < n; i++){
+            dp[i][0] = 0;
         }
-        else{
-            return val;
+        // 1 2 3
+        for(int sum = 1; sum <= amount; sum++){
+            for(int start = 0; start < n; start++){
+                if((sum - coins[start]) >= 0) dp[start][sum] = min(dp[start][sum], 1 + dp[start][sum - coins[start]]);
+                if((start - 1) >= 0) dp[start][sum] = min(dp[start][sum],dp[start - 1][sum]);
+
+            }
         }
+        return (dp[n - 1][amount] >= 1e9) ? -1 : dp[n- 1][amount];
+
+
     }
     //recursion -> memoization -> tabulation -> space optimization
 };
