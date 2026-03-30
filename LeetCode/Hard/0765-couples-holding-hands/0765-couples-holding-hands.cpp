@@ -23,7 +23,7 @@ public:
 
         int cnt = 0;
         for(int i = 0; i < n; i++){
-            if(find(par[i]) == i) cnt++;
+            if(par[i] == i) cnt++;
         }
         return n - cnt;
     }
