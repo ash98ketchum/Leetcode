@@ -1,40 +1,58 @@
 class Solution {
 public:
-    
-    bool isLower(char ch){
+    bool checkch(char ch){
         return ch >= 'a' && ch <= 'z';
     }
 
     vector<int> countWordOccurrences(vector<string>& chunks, vector<string>& queries) {
         
+        map<string, int> mp;
+
         string s = "";
-        for(auto &it : chunks) s += it;
+        for(auto it : chunks) s += it;
 
-        map<string,int> mp;
-
-        string word = "";
         int n = s.size();
 
-        for(int i = 0; i < n; i++){
-            if(isLower(s[i])){
+        string word = "";
+        int i = 0;
+
+        while(i < n){
+
+            if(checkch(s[i])){
                 word += s[i];
             }
-            else if(s[i] == '-' && i > 0 && i < n - 1 && isLower(s[i-1]) && isLower(s[i+1])){
-                word += '-';
+
+            else if(s[i] == '-'){
+
+                if(i > 0 && i < n - 1 && checkch(s[i - 1]) && checkch(s[i + 1])){
+                    word += s[i];
+                }
+                else{
+                    if(word != ""){
+                        mp[word]++;
+                        word = "";
+                    }
+                }
             }
+
             else{
-                if(!word.empty()){
+                if(word != ""){
                     mp[word]++;
                     word = "";
                 }
             }
+
+            i++;
         }
-        if(!word.empty()) mp[word]++;
 
-        vector<int> ans;
+        if(word != "") mp[word]++;
 
-        for(auto &q : queries){
-            ans.push_back(mp[q]);
+        int q = queries.size();
+        vector<int> ans(q);
+
+        while(q--){
+            if(mp.find(queries[q]) == mp.end()) ans[q] = 0;
+            else ans[q] = mp[queries[q]];
         }
 
         return ans;
